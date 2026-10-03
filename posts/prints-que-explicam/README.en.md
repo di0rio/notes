@@ -171,4 +171,4 @@ three details there:
 - **selectors by text and role survive change better than fixed coordinates.** only the labels have coordinates (`at`), and that's a design decision, not a layout one.
 - **the reader needs a way out.** even at 1024px, a 4K screen holds more detail than fits on the page, so clicking opens it at full size.
 
-the portfolio's code lives under [di0rio](https://github.com/di0rio).
+the portfolio's code lives at [di0rio/portfolio-cd](https://github.com/di0rio/portfolio-cd).

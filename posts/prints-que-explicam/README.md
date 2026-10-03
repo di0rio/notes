@@ -171,4 +171,4 @@ três detalhes ali:
 - **seletor por texto e role aguenta mudança melhor que coordenada fixa.** só os rótulos têm coordenada (`at`), que é decisão de design e não de layout.
 - **o leitor precisa de uma saída.** mesmo com 1024px, uma tela de 4K tem mais detalhe do que cabe na página, então clicar abre no tamanho real.
 
-o código do portfólio está em [di0rio](https://github.com/di0rio).
+o código do portfólio está em [di0rio/portfolio-cd](https://github.com/di0rio/portfolio-cd).
