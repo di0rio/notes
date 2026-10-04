@@ -8,6 +8,7 @@ cada pasta tem o texto em português (`README.md`) e em inglês (`README.en.md`)
 
 | data | post | tema |
 | --- | --- | --- |
+| 2026-10-04 | [a skill que escrevi pra IA parar de complicar meu código](posts/skill-de-codigo-pragmatico) ([en](posts/skill-de-codigo-pragmatico/README.en.md)) | IA, engenharia, boas práticas |
 | 2026-10-03 | [um alias de 447 bytes que travou meu parser](posts/yaml-alias-bomb) ([en](posts/yaml-alias-bomb/README.en.md)) | segurança, Go, YAML, fuzzing |
 | 2026-10-03 | [como o sentinel-forge acha força bruta num auth.log de verdade](posts/forca-bruta-no-auth-log) ([en](posts/forca-bruta-no-auth-log/README.en.md)) | detecção, logs do sshd, Go |
 | 2026-10-03 | [prints que explicam: como gerei as capturas anotadas do portfólio](posts/prints-que-explicam) ([en](posts/prints-que-explicam/README.en.md)) | front-end, Playwright, Next.js |
