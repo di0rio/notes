@@ -1,14 +1,16 @@
 ---
 title: a skill que escrevi pra IA parar de complicar meu código
-description: um SKILL.md com prioridade de regras, hierarquia de solução e quality gate, pra agente de código entregar a menor solução correta, segura e legível
+description: um SKILL.md com prioridade de regras, escada de solução, escopo mínimo (sem global à toa) e quality gate, comparado com o ponytail
 date: 2026-10-04
 ---
 
 # a skill que escrevi pra IA parar de complicar meu código
 
+atualizado em 2026-10-05: reescrevi a skill (de 44 seções pra uma versão bem menor) depois de compará-la com o ponytail. veja "o que mudou / comparando com o ponytail" mais abaixo.
+
 ## tl;dr
 
-agente de código tem um vício: pedir uma coisa pequena e receber de volta uma camada nova, uma interface com uma implementação só, uma dependência e um `catch {}` pra "garantir". escrevi um `SKILL.md` chamado **Self-documenting Code and Pragmatic Engineering for AI** que diz pro agente como analisar, gerar, corrigir, refatorar e revisar código com um objetivo só: **entregar a menor solução correta, segura e legível, compatível com o projeto atual.** o arquivo completo está em [`SKILL.md`](./SKILL.md). aqui eu resumo as partes que mais importam. é uma versão em andamento: eu continuo mexendo nela.
+agente de código tem um vício: pedir uma coisa pequena e receber de volta uma camada nova, uma interface com uma implementação só, uma dependência e um `catch {}` pra "garantir". escrevi um `SKILL.md` chamado **pragmatic-code** que diz pro agente como analisar, gerar, corrigir, refatorar e revisar código com um objetivo só: **entregar a menor solução correta e segura, no menor escopo que funciona, seguindo as convenções do projeto.** o arquivo completo está em [`SKILL.md`](./SKILL.md). aqui eu resumo as partes que mais importam. é uma versão em andamento: eu continuo mexendo nela.
 
 ## o problema
 
@@ -19,15 +21,16 @@ código gerado por IA costuma funcionar e ainda assim ser ruim de manter. os sin
 - lint e TypeScript silenciados (`@ts-ignore`, `eslint-disable`) só pra passar;
 - `try/catch` vazio escondendo erro;
 - código comentado e TODO inútil largados no diff;
-- mudança que quebra contrato de outra parte do sistema sem ninguém avisar.
+- mudança que quebra contrato de outra parte do sistema sem ninguém avisar;
+- estilo e estado indo parar no escopo global só pra "reaproveitar" (esse eu só percebi testando o ponytail, mais abaixo).
 
 como sou dev front-end júnior e uso IA pra aprender, isso pesa em dobro: se eu não percebo o excesso, ele vira o "jeito certo" na minha cabeça. então escrevi as regras que eu queria que o agente seguisse, e que eu mesmo quero aprender a seguir.
 
 ## a ideia central
 
-antes de escrever código, o agente precisa entender o problema, ler os arquivos relevantes, achar quem consome aquilo e checar contratos. só depois escolhe a menor solução. e explica a estratégia de forma proporcional: pra mudança trivial, uma frase basta.
+antes de escrever código, o agente precisa entender o problema, ler os arquivos relevantes, achar quem consome aquilo e checar contratos. só depois escolhe a menor solução. e explica de forma proporcional: pra mudança trivial, uma frase basta.
 
-> **Goal: deliver the smallest correct, safe, readable solution compatible with the current project.**
+> Goal: the smallest correct, safe, readable solution, in the narrowest scope that works, using the project's own conventions.
 
 repara que "menor" vem junto de "correta" e "segura". o menor diff só vale depois de entender o fluxo inteiro.
 
@@ -35,104 +38,98 @@ repara que "menor" vem junto de "correta" e "segura". o menor diff só vale depo
 
 ### 1. prioridade de regras
 
-quando duas regras brigam, tem ordem pra decidir:
+quando duas regras brigam, tem ordem pra decidir: segurança, correção e requisitos explícitos, contratos e integridade de dados, convenções do projeto, simplicidade, legibilidade, performance (só com necessidade concreta), e por último abstração e gosto. simplicidade fica no meio de propósito. e tem uma frase que existe pra evitar o pior efeito colateral de "faça simples":
 
-1. segurança
-2. correção funcional
-3. requisitos explícitos
-4. integridade de contrato e compatibilidade
-5. integridade de dados
-6. simplicidade (KISS/YAGNI)
-7. legibilidade
-8. manutenibilidade
-9. performance, quando há necessidade concreta
-10. abstração
-11. preferência de estilo
-
-simplicidade fica no meio de propósito. e tem uma frase que existe pra evitar o pior efeito colateral de "faça simples":
-
-> Simplicity never justifies removing authorization, validation, integrity, error handling, or explicit requirements.
+> Simplicity never justifies removing authorization, validation, integrity, error handling, accessibility basics or an explicit requirement.
 
 sem isso, "simplifica" vira "tira a validação".
 
-### 2. hierarquia de solução
+### 2. escada de solução
 
 antes de adicionar código, o agente desce essa escada e para no primeiro degrau que resolve direito:
 
 ```text
-remover → reusar → stdlib → API nativa do runtime/framework → dependência já instalada → código simples → abstração → dependência nova → infraestrutura
+precisa existir? → reusar → stdlib → API nativa → dependência já instalada → poucas linhas → abstração → dependência nova
 ```
 
-e tem um detalhe que eu gosto: "uma dependência instalada não é uma dependência obrigatória". estar no `package.json` não é motivo pra usar.
+"uma dependência instalada não é uma dependência obrigatória". estar no `package.json` não é motivo pra usar.
 
-### 3. anti-overengineering
+### 3. escopo e localidade (minimal não é centralizado)
 
-a skill lista o que **não** pode entrar no automático: Clean Architecture, DDD, Repository, Unit of Work, Factory, Adapter, Strategy, CQRS, Event Bus, container de injeção de dependência, microsserviços. a frase que resume: padrões são ferramentas, não requisitos. e camada vazia também não vale:
+esse é o degrau novo, e o mais importante da versão 2. regra: reusar não significa jogar no global. coloca no menor escopo que funciona e segue como o projeto já faz.
 
-```text
-Route → Controller → Service → Repository → Database
+- **estilo:** usa a convenção que já existe (Tailwind, CSS Modules, estilo colocalizado). valor de uso único fica local. só vira token global quando é uma decisão de design compartilhada, usada em 2+ lugares, e o projeto já tem sistema de tokens.
+- **estado:** fica no componente, sobe só até o pai comum mais próximo. context, store ou singleton só quando o estado é de fato compartilhado.
+- **helpers e constantes:** do lado de quem usa. vão pra `utils/` quando aparece o segundo consumidor de verdade.
+
+```diff
+- /* globals.css */
+- :root { --contact-card-gap: 14px; }
+- .contact-card { gap: var(--contact-card-gap); }
++ <div className="flex gap-3.5">   {/* um uso, projeto usa Tailwind */}
 ```
 
-se nenhuma dessas camadas tem responsabilidade de verdade, é só cerimônia.
+### 4. não silenciar ferramenta nem erro
 
-### 4. não silenciar ferramenta
-
-`@ts-ignore`, `eslint-disable` e parecidos não entram só pra fazer a implementação passar. o certo é corrigir a causa. suspensão legítima existe, mas tem que ser mínima e justificável. mesma lógica pra erro: nada de
-
-```ts
-try {
-  await operation();
-} catch {}
-```
-
-um erro é tratado, convertido, propagado ou ignorado de propósito, quando isso é parte do contrato.
+`@ts-ignore`, `eslint-disable` e parecidos não entram só pra fazer a implementação passar. o certo é corrigir a causa. suspensão legítima existe, mas tem que ser mínima e explicada. mesma lógica pra `catch {}`: um erro é tratado, convertido, propagado ou ignorado de propósito, com comentário dizendo o porquê.
 
 ### 5. breaking change tem que ser dito
 
-se a única solução correta quebra um contrato existente (função exportada, endpoint, schema, tipo), o agente não aplica em silêncio. ele aponta o contrato afetado, explica por que é necessário, avalia quem consome e, se der, propõe um caminho compatível ou de transição. quebrar pode ser a decisão certa, mas tem que ser uma decisão explícita, não efeito colateral.
+se a única solução correta quebra um contrato existente (função exportada, endpoint, schema, props, tipo), o agente não aplica em silêncio. ele aponta o contrato afetado, explica por que é necessário, avalia quem consome e, se der, propõe um caminho de transição. quebrar pode ser a decisão certa, mas tem que ser explícita.
 
-### 6. quality gate
+### 6. quando minimal está errado
 
-uma checklist antes de entregar. algumas das perguntas:
+seção nova, nascida das falhas de skills "minimalistas": apagar código que parece morto mas é usado por string ou config; pular validação, erro ou acessibilidade pra encurtar diff; recusar um teste que a lógica precisa; espremer código legível num one-liner esperto; editar arquivo gerado; apagar comentário que explica o porquê; ignorar i18n. a skill manda fazer mais, não menos, nesses casos.
 
-- requisito atendido, sem feature extra?
-- menor diff correto, causa raiz corrigida?
-- consumidores e contratos verificados?
-- abstração e dependência realmente necessárias?
-- sem comentário redundante, código comentado, TODO trivial ou log temporário?
-- fronteiras de confiança, autorização e integridade de dados preservadas?
-- erros tratados? typecheck, lint, testes e build rodados quando aplicável?
-- se tem breaking change, foi sinalizada?
+### 7. quality gate
 
-e uma regra pra não inventar: usar os comandos reais do projeto, sem criar script.
+uma checklist curta antes de entregar: requisito atendido sem extra, causa raiz e contratos, escopo mínimo (estilo, estado, helpers), abstração e global realmente necessários, fronteiras de confiança e erros intactos, nada silenciado, acessibilidade e i18n sem regressão, e os comandos reais do projeto rodados (sem inventar script).
 
-### 7. a regra de ouro
+## o que mudou / comparando com o ponytail
 
-são perguntas em cascata, na ordem:
+o [ponytail](https://ponytail.dev/) é uma skill popular com a mesma ideia (código mínimo). instalei, usei e li o `SKILL.md` inteiro. comparação honesta:
 
-> Can I remove it? → Does it already exist? → Does the platform already solve it? → Does an existing dependency solve it? → Do a few simple lines solve it? → Is there a real need for abstraction?
+**o que o ponytail faz melhor**
 
-só depois disso se considera dependência nova ou infraestrutura. e fecha com: entenda o problema por completo antes de tentar resolver do jeito mínimo.
+- é curto: dá pra ler em 2 minutos, e o agente de fato segue. a minha tinha 44 seções que se repetiam;
+- `description` com gatilhos claros ("be lazy", "yagni", reclamação de over-engineering) e com o "quando não usar";
+- formato de resposta fechado: código primeiro, no máximo três linhas, `skipped: X, add when Y`;
+- níveis de intensidade (lite, full, ultra) e exemplos curtos de cada um;
+- comentário `ponytail:` marcando o teto de uma simplificação, e a regra de deixar um check executável pra lógica não trivial.
+
+**o que a minha faz melhor**
+
+- prioridade explícita: segurança, correção e contratos acima de simplicidade;
+- fronteiras de confiança, autorização, integridade e concorrência de verdade (o ponytail só cita validação de passagem);
+- breaking change tratado como decisão explícita, com migração;
+- não silenciar ferramenta, quality gate, arquivo gerado.
+
+**onde cada uma falha**
+
+- ponytail: empurra a "reutilização" pro global. o agente cria variável CSS em `:root`, token, classe em stylesheet global, store ou singleton pra valor de uso único, porque "centralizar" parece menos código. na prática vira acoplamento e diff maior. também não diz nada sobre acessibilidade de verdade, i18n, estilo do projeto ou apagar comentário que explica o porquê, e "uma linha antes de cinquenta" incentiva one-liner ilegível;
+- a minha antiga: longa demais, seções repetidas, pouco exemplo, `description` genérica que dispara pouco, e nenhuma palavra sobre escopo.
+
+**o que eu fiz**
+
+- cortei de ~2500 pra ~1400 palavras consolidando as seções repetidas;
+- `description` nova no estilo ponytail (gatilhos, quando usar, quando não usar);
+- adicionei "escopo e localidade" e "quando minimal está errado" (precauções), exemplos curtos com antes/depois, seção de frontend (React, Next.js, Tailwind, i18n, acessibilidade) e formato de resposta curto;
+- **não** copiei os níveis de intensidade. pra quem usa no dia a dia eu não vi ganho real: pedir "mais enxuto" já resolve, e três modos viram mais uma coisa pro agente decidir. se eu sentir falta, volto.
+
+a lição que eu levo: minimal não é sinônimo de centralizado nem de "o menor número de caracteres". é o menor mudança correta, no menor escopo, no estilo que o projeto já usa.
 
 ## como usar
 
+a skill agora tem repo próprio, com instalação e o benchmark completo (5 tarefas, sem skill vs ponytail vs pragmatic-code, avaliadas às cegas): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
+
 duas formas, as que eu uso:
 
-1. **Claude Code:** salva o arquivo como `SKILL.md` numa pasta em `~/.claude/skills/<nome>/` (por exemplo `~/.claude/skills/pragmatic-code/SKILL.md`). o arquivo precisa de frontmatter com `name` e `description`:
-
-   ```yaml
-   ---
-   name: pragmatic-code
-   description: Self-documenting code and pragmatic engineering rules for AI coding agents - deliver the smallest correct, safe, readable solution compatible with the current project.
-   ---
-   ```
-
-   o `description` é o que o agente lê pra decidir quando carregar a skill, então vale ajustar pro seu caso.
+1. **Claude Code:** salva o arquivo como `SKILL.md` numa pasta em `~/.claude/skills/<nome>/` (por exemplo `~/.claude/skills/pragmatic-code/SKILL.md`). o arquivo precisa de frontmatter com `name` e `description`. o `description` é o que o agente lê pra decidir quando carregar a skill, então vale ajustar pro seu caso.
 
 2. **outros agentes:** cola o conteúdo no arquivo de regras do projeto, tipo `AGENTS.md`, `CLAUDE.md` ou as regras do Cursor.
 
-o arquivo completo, com todas as seções (TypeScript, banco, upload, API, estado global, testes e o resto), está em [`./SKILL.md`](./SKILL.md).
+o arquivo completo está em [`./SKILL.md`](./SKILL.md).
 
 ## o que ainda falta
 
-é uma versão em andamento. algumas seções ainda estão grandes demais pra um prompt, e eu estou testando o que o agente realmente segue e o que ele ignora. as regras nascem de coisa que me irritou no código gerado, então a lista cresce (e às vezes encolhe) conforme eu uso. se eu descobrir que alguma regra não muda o comportamento, ela sai: a skill também precisa seguir a própria regra de deletar primeiro.
+continua sendo uma versão em andamento. falta testar com tarefas reais lado a lado (com e sem a skill, e contra o ponytail) pra medir se o agente segue de verdade, principalmente a parte de escopo. as regras nascem de coisa que me irritou no código gerado, então a lista cresce (e às vezes encolhe). se alguma regra não mudar o comportamento, ela sai: a skill também precisa seguir a própria regra de deletar primeiro.
