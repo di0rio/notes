@@ -1,12 +1,12 @@
 ---
 title: a skill que escrevi pra IA parar de complicar meu código
-description: um SKILL.md com prioridade de regras, escada de solução, escopo mínimo (sem global à toa) e quality gate, comparado com o ponytail
+description: um SKILL.md com prioridade de regras, escada de solução, escopo mínimo (sem global à toa) e quality gate, pra agente de código entregar a menor mudança correta
 date: 2026-10-04
 ---
 
 # a skill que escrevi pra IA parar de complicar meu código
 
-atualizado em 2026-10-05: reescrevi a skill (de 44 seções pra uma versão bem menor) depois de compará-la com o ponytail. veja "o que mudou / comparando com o ponytail" mais abaixo.
+atualizado em 2026-10-05: reescrevi a skill (de 44 seções pra uma versão bem menor) depois de compará-la com o ponytail. veja "o que mudou / o que aprendi com o ponytail" mais abaixo.
 
 ## tl;dr
 
@@ -22,7 +22,7 @@ código gerado por IA costuma funcionar e ainda assim ser ruim de manter. os sin
 - `try/catch` vazio escondendo erro;
 - código comentado e TODO inútil largados no diff;
 - mudança que quebra contrato de outra parte do sistema sem ninguém avisar;
-- estilo e estado indo parar no escopo global só pra "reaproveitar" (esse eu só percebi testando o ponytail, mais abaixo).
+- estilo e estado indo parar no escopo global só pra "reaproveitar" (esse eu só percebi usando o ponytail, mais abaixo).
 
 como sou dev front-end júnior e uso IA pra aprender, isso pesa em dobro: se eu não percebo o excesso, ele vira o "jeito certo" na minha cabeça. então escrevi as regras que eu queria que o agente seguisse, e que eu mesmo quero aprender a seguir.
 
@@ -85,11 +85,11 @@ seção nova, nascida das falhas de skills "minimalistas": apagar código que pa
 
 uma checklist curta antes de entregar: requisito atendido sem extra, causa raiz e contratos, escopo mínimo (estilo, estado, helpers), abstração e global realmente necessários, fronteiras de confiança e erros intactos, nada silenciado, acessibilidade e i18n sem regressão, e os comandos reais do projeto rodados (sem inventar script).
 
-## o que mudou / comparando com o ponytail
+## o que mudou / o que aprendi com o ponytail
 
-o [ponytail](https://ponytail.dev/) é uma skill popular com a mesma ideia (código mínimo). instalei, usei e li o `SKILL.md` inteiro. comparação honesta:
+o [ponytail](https://ponytail.dev/) é uma skill popular com a mesma ideia (código mínimo). instalei, usei e li o `SKILL.md` inteiro. ele me ensinou bastante sobre como escrever uma skill que o agente segue de verdade:
 
-**o que o ponytail faz melhor**
+**o que eu peguei dele**
 
 - é curto: dá pra ler em 2 minutos, e o agente de fato segue. a minha tinha 44 seções que se repetiam;
 - `description` com gatilhos claros ("be lazy", "yagni", reclamação de over-engineering) e com o "quando não usar";
@@ -97,17 +97,17 @@ o [ponytail](https://ponytail.dev/) é uma skill popular com a mesma ideia (cód
 - níveis de intensidade (lite, full, ultra) e exemplos curtos de cada um;
 - comentário `ponytail:` marcando o teto de uma simplificação, e a regra de deixar um check executável pra lógica não trivial.
 
-**o que a minha faz melhor**
+**o que eu quis manter da minha**
 
 - prioridade explícita: segurança, correção e contratos acima de simplicidade;
 - fronteiras de confiança, autorização, integridade e concorrência de verdade (o ponytail só cita validação de passagem);
 - breaking change tratado como decisão explícita, com migração;
 - não silenciar ferramenta, quality gate, arquivo gerado.
 
-**onde cada uma falha**
+**onde eu senti falta de algo**
 
-- ponytail: empurra a "reutilização" pro global. o agente cria variável CSS em `:root`, token, classe em stylesheet global, store ou singleton pra valor de uso único, porque "centralizar" parece menos código. na prática vira acoplamento e diff maior. também não diz nada sobre acessibilidade de verdade, i18n, estilo do projeto ou apagar comentário que explica o porquê, e "uma linha antes de cinquenta" incentiva one-liner ilegível;
-- a minha antiga: longa demais, seções repetidas, pouco exemplo, `description` genérica que dispara pouco, e nenhuma palavra sobre escopo.
+- usando o ponytail no meu dia a dia, senti o "reutilizar" puxar pro global: o agente cria variável CSS em `:root`, token, classe em stylesheet global, store ou singleton pra valor de uso único, porque "centralizar" parece menos código. na prática vira acoplamento e diff maior. também não diz nada sobre acessibilidade de verdade, i18n, estilo do projeto ou apagar comentário que explica o porquê, e "uma linha antes de cinquenta" incentiva one-liner ilegível;
+- na minha versão antiga, o problema era outro: longa demais, seções repetidas, pouco exemplo, `description` genérica que dispara pouco, e nenhuma palavra sobre escopo.
 
 **o que eu fiz**
 
@@ -120,7 +120,7 @@ a lição que eu levo: minimal não é sinônimo de centralizado nem de "o menor
 
 ## como usar
 
-a skill agora tem repo próprio, com instalação e o benchmark completo (5 tarefas, sem skill vs ponytail vs pragmatic-code, avaliadas às cegas): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
+a skill agora tem repo próprio, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
 
 duas formas, as que eu uso:
 
@@ -132,4 +132,4 @@ o arquivo completo está em [`./SKILL.md`](./SKILL.md).
 
 ## o que ainda falta
 
-continua sendo uma versão em andamento. falta testar com tarefas reais lado a lado (com e sem a skill, e contra o ponytail) pra medir se o agente segue de verdade, principalmente a parte de escopo. as regras nascem de coisa que me irritou no código gerado, então a lista cresce (e às vezes encolhe). se alguma regra não mudar o comportamento, ela sai: a skill também precisa seguir a própria regra de deletar primeiro.
+continua sendo uma versão em andamento. já rodei um teste rápido com 5 tarefas (está no repo), mas foi uma rodada só e com tarefas que eu mesmo escrevi. falta usar em projeto real por mais tempo pra saber se o agente segue de verdade, principalmente a parte de escopo. as regras nascem de coisa que me irritou no código gerado, então a lista cresce (e às vezes encolhe). se alguma regra não mudar o comportamento, ela sai: a skill também precisa seguir a própria regra de deletar primeiro.

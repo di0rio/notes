@@ -1,12 +1,12 @@
 ---
 title: the skill I wrote so AI stops overcomplicating my code
-description: a SKILL.md with rule priority, a solution ladder, minimal scope (no global-by-default) and a quality gate, compared with ponytail
+description: a SKILL.md with rule priority, a solution ladder, minimal scope (no global-by-default) and a quality gate, so coding agents deliver the smallest correct change
 date: 2026-10-04
 ---
 
 # the skill I wrote so AI stops overcomplicating my code
 
-updated 2026-10-05: I rewrote the skill (from 44 sections to a much smaller version) after comparing it with ponytail. See "what changed / comparing with ponytail" below.
+updated 2026-10-05: I rewrote the skill (from 44 sections to a much smaller version) after comparing it with ponytail. See "what changed / what I learned from ponytail" below.
 
 ## tl;dr
 
@@ -22,7 +22,7 @@ AI-generated code often works and is still hard to maintain. The symptoms that b
 - an empty `try/catch` hiding errors;
 - commented-out code and pointless TODOs left in the diff;
 - a change that breaks another part's contract and nobody says so;
-- styles and state pushed into global scope just to "reuse" them (I only noticed this one while testing ponytail, below).
+- styles and state pushed into global scope just to "reuse" them (I only noticed this one while using ponytail, below).
 
 As a junior front-end dev who uses AI to learn, this hits twice as hard: if I don't notice the excess, it becomes "the right way" in my head. So I wrote down the rules I wanted the agent to follow, and the ones I want to learn to follow myself.
 
@@ -85,11 +85,11 @@ A new section, born from the failure modes of "minimalist" skills: deleting code
 
 A short checklist before delivering: requirement met with nothing extra, root cause and contracts, minimal scope (styling, state, helpers), abstractions and globals actually needed, trust boundaries and errors intact, nothing silenced, accessibility and i18n not regressed, and the project's real commands run (no invented scripts).
 
-## what changed / comparing with ponytail
+## what changed / what I learned from ponytail
 
-[ponytail](https://ponytail.dev/) is a popular skill with the same idea (minimal code). I installed it, used it and read the whole `SKILL.md`. An honest comparison:
+[ponytail](https://ponytail.dev/) is a popular skill with the same idea (minimal code). I installed it, used it and read the whole `SKILL.md`. It taught me a lot about writing a skill an agent actually follows:
 
-**what ponytail does better**
+**what I took from it**
 
 - it is short: you can read it in 2 minutes, and the agent actually follows it. Mine had 44 sections that repeated each other;
 - a `description` with clear triggers ("be lazy", "yagni", complaints about over-engineering) and a "when not to use";
@@ -97,17 +97,17 @@ A short checklist before delivering: requirement met with nothing extra, root ca
 - intensity levels (lite, full, ultra) with short examples of each;
 - a `ponytail:` comment marking the ceiling of a simplification, and the rule to leave one runnable check for non-trivial logic.
 
-**what mine does better**
+**what I wanted to keep from mine**
 
 - explicit priority: security, correctness and contracts above simplicity;
 - real trust boundaries, authorization, integrity and concurrency (ponytail only mentions validation in passing);
 - breaking changes as an explicit decision, with migration;
 - not silencing tools, a quality gate, generated files.
 
-**where each one fails**
+**where I missed something**
 
-- ponytail: it pushes "reuse" into the global scope. The agent creates a CSS variable in `:root`, a token, a class in a global stylesheet, a store or a singleton for a one-off value, because "centralizing" looks like less code. In practice it becomes coupling and a bigger diff. It also says little about real accessibility, i18n, the project's style, or keeping comments that explain why, and "one line before fifty" invites unreadable one-liners;
-- my old one: too long, repeated sections, few examples, a generic `description` that triggers rarely, and not a word about scope.
+- using ponytail day to day, I felt "reuse" pulling toward the global scope: The agent creates a CSS variable in `:root`, a token, a class in a global stylesheet, a store or a singleton for a one-off value, because "centralizing" looks like less code. In practice it becomes coupling and a bigger diff. It also says little about real accessibility, i18n, the project's style, or keeping comments that explain why, and "one line before fifty" invites unreadable one-liners;
+- my old version had a different problem: too long, repeated sections, few examples, a generic `description` that triggers rarely, and not a word about scope.
 
 **what I did**
 
@@ -120,7 +120,7 @@ The lesson I take: minimal is not a synonym for centralized or for "fewest chara
 
 ## how to use it
 
-The skill now has its own repo, with install steps and the full benchmark (5 tasks, no rules vs ponytail vs pragmatic-code, judged blind): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
+The skill now has its own repo, with install steps and a quick test (5 small tasks, with and without rules, judged blind by another model): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
 
 Two ways, the ones I use:
 
@@ -132,4 +132,4 @@ The full file is at [`./SKILL.md`](./SKILL.md).
 
 ## what is still missing
 
-It is still a work in progress. I still need to test it on real tasks side by side (with and without the skill, and against ponytail) to measure whether the agent really follows it, especially the scope part. The rules come from things that annoyed me in generated code, so the list grows (and sometimes shrinks). If a rule doesn't change behavior, it goes: the skill has to follow its own delete-first rule too.
+It is still a work in progress. I ran a quick test with 5 tasks (it is in the repo), but it was a single run on tasks I wrote myself. It still needs longer use on real projects to know whether the agent really follows it, especially the scope part. The rules come from things that annoyed me in generated code, so the list grows (and sometimes shrinks). If a rule doesn't change behavior, it goes: the skill has to follow its own delete-first rule too.
