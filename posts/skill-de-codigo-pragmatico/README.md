@@ -136,7 +136,7 @@ os números do teste rápido (5 tarefas) foram medidos com a versão anterior, a
 
 ## como usar
 
-a skill agora tem repo próprio, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
+a skill agora tem repo próprio, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/clean-code-ai](https://github.com/di0rio/clean-code-ai).
 
 duas formas, as que eu uso:
 

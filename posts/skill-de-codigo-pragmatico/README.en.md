@@ -136,7 +136,7 @@ The numbers from the quick test (5 tasks) were measured with the previous versio
 
 ## how to use it
 
-The skill now has its own repo, with install steps and a quick test (5 small tasks, with and without rules, judged blind by another model): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
+The skill now has its own repo, with install steps and a quick test (5 small tasks, with and without rules, judged blind by another model): [github.com/di0rio/clean-code-ai](https://github.com/di0rio/clean-code-ai).
 
 Two ways, the ones I use:
 
