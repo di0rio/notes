@@ -8,9 +8,11 @@ date: 2026-10-04
 
 atualizado em 2026-10-05: reescrevi a skill (de 44 seções pra uma versão bem menor) depois de compará-la com o ponytail. veja "o que mudou / o que aprendi com o ponytail" mais abaixo.
 
+atualizado em 2026-10-05 (de novo): a skill virou **clean-code-ai**: juntei com um rascunho meu mais antigo, também chamado clean-code-ai, e ela substitui a pragmatic-code. veja "virou clean-code-ai" mais abaixo.
+
 ## tl;dr
 
-agente de código tem um vício: pedir uma coisa pequena e receber de volta uma camada nova, uma interface com uma implementação só, uma dependência e um `catch {}` pra "garantir". escrevi um `SKILL.md` chamado **pragmatic-code** que diz pro agente como analisar, gerar, corrigir, refatorar e revisar código com um objetivo só: **entregar a menor solução correta e segura, no menor escopo que funciona, seguindo as convenções do projeto.** o arquivo completo está em [`SKILL.md`](./SKILL.md). aqui eu resumo as partes que mais importam. é uma versão em andamento: eu continuo mexendo nela.
+agente de código tem um vício: pedir uma coisa pequena e receber de volta uma camada nova, uma interface com uma implementação só, uma dependência e um `catch {}` pra "garantir". escrevi um `SKILL.md` chamado **clean-code-ai** (antes **pragmatic-code**) que diz pro agente como analisar, gerar, corrigir, refatorar e revisar código com um objetivo só: **entregar a menor solução correta e segura, no menor escopo que funciona, seguindo as convenções do projeto.** o arquivo completo está em [`SKILL.md`](./SKILL.md). aqui eu resumo as partes que mais importam. é uma versão em andamento: eu continuo mexendo nela.
 
 ## o problema
 
@@ -30,7 +32,7 @@ como sou dev front-end júnior e uso IA pra aprender, isso pesa em dobro: se eu 
 
 antes de escrever código, o agente precisa entender o problema, ler os arquivos relevantes, achar quem consome aquilo e checar contratos. só depois escolhe a menor solução. e explica de forma proporcional: pra mudança trivial, uma frase basta.
 
-> Goal: the smallest correct, safe, readable solution, in the narrowest scope that works, using the project's own conventions.
+> **Objetivo:** a menor solução correta, segura e compatível com o projeto, no menor escopo que funciona e seguindo as convenções que já existem.
 
 repara que "menor" vem junto de "correta" e "segura". o menor diff só vale depois de entender o fluxo inteiro.
 
@@ -40,7 +42,7 @@ repara que "menor" vem junto de "correta" e "segura". o menor diff só vale depo
 
 quando duas regras brigam, tem ordem pra decidir: segurança, correção e requisitos explícitos, contratos e integridade de dados, convenções do projeto, simplicidade, legibilidade, performance (só com necessidade concreta), e por último abstração e gosto. simplicidade fica no meio de propósito. e tem uma frase que existe pra evitar o pior efeito colateral de "faça simples":
 
-> Simplicity never justifies removing authorization, validation, integrity, error handling, accessibility basics or an explicit requirement.
+> Simplicidade **nunca** justifica remover autenticação, autorização, validação, integridade, tratamento de erro, acessibilidade básica ou requisito explícito.
 
 sem isso, "simplifica" vira "tira a validação".
 
@@ -118,13 +120,27 @@ o [ponytail](https://ponytail.dev/) é uma skill popular com a mesma ideia (cód
 
 a lição que eu levo: minimal não é sinônimo de centralizado nem de "o menor número de caracteres". é o menor mudança correta, no menor escopo, no estilo que o projeto já usa.
 
+## virou clean-code-ai
+
+atualização de 2026-10-05: juntei a skill com um rascunho meu mais antigo, também chamado clean-code-ai, e o resultado se chama **clean-code-ai** e substitui a pragmatic-code. o arquivo [`SKILL.md`](./SKILL.md) agora é a versão em português; em inglês fica em [`SKILL.en.md`](./SKILL.en.md). o que a versão nova tem a mais que a pragmatic-code:
+
+- **os níveis voltaram:** lite, full e ultra, com `/clean-code-ai off` pra desligar. antes eu tinha escrito que não copiei os níveis; com essa junção eles voltaram, já que o rascunho antigo tinha;
+- **a escada ganhou "remover código"** como degrau, e abstração só com 2+ usos reais hoje;
+- **prioridade de regras:** contratos existentes e integridade dos dados viraram itens separados (eram um só), e "gosto pessoal de estilo e abstração" fica por último;
+- **exemplo de estado no lugar errado:** `useState` + `useEffect` pra um valor que dá pra calcular durante o render;
+- **critério de parada:** se o diff passa de ~50 linhas, cria arquivo novo, abstração, global ou dependência, a skill pede uma frase de justificativa concreta. se eu pedi a feature explicitamente, o arquivo novo já está justificado e ela segue sem travar;
+- **arquivo regenerado por ferramenta** (dicionário de i18n, bloco que o `next dev` escreve): não reverte à mão, commita junto ou deixa a ferramenta cuidar;
+- **comentário de limite** com prefixo `clean-code-ai:`, pra simplificação com teto conhecido.
+
+os números do teste rápido (5 tarefas) foram medidos com a versão anterior, a pragmatic-code, e ainda não rodei de novo com a clean-code-ai.
+
 ## como usar
 
 a skill agora tem repo próprio, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/pragmatic-code](https://github.com/di0rio/pragmatic-code).
 
 duas formas, as que eu uso:
 
-1. **Claude Code:** salva o arquivo como `SKILL.md` numa pasta em `~/.claude/skills/<nome>/` (por exemplo `~/.claude/skills/pragmatic-code/SKILL.md`). o arquivo precisa de frontmatter com `name` e `description`. o `description` é o que o agente lê pra decidir quando carregar a skill, então vale ajustar pro seu caso.
+1. **Claude Code:** salva o arquivo como `SKILL.md` numa pasta em `~/.claude/skills/<nome>/` (por exemplo `~/.claude/skills/clean-code-ai/SKILL.md`). o arquivo precisa de frontmatter com `name` e `description`. o `description` é o que o agente lê pra decidir quando carregar a skill, então vale ajustar pro seu caso.
 
 2. **outros agentes:** cola o conteúdo no arquivo de regras do projeto, tipo `AGENTS.md`, `CLAUDE.md` ou as regras do Cursor.
 
