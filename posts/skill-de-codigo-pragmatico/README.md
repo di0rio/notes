@@ -132,7 +132,7 @@ atualização de 2026-10-05: juntei a skill com um rascunho meu mais antigo, tam
 - **arquivo regenerado por ferramenta** (dicionário de i18n, bloco que o `next dev` escreve): não reverte à mão, commita junto ou deixa a ferramenta cuidar;
 - **comentário de limite** com prefixo `clean-code-ai:`, pra simplificação com teto conhecido.
 
-os números do teste rápido (5 tarefas) foram medidos com a versão anterior, a pragmatic-code, e ainda não rodei de novo com a clean-code-ai.
+rodei o teste rápido (5 tarefas) de novo com a clean-code-ai, e o juiz reavaliou às cegas as 4 versões juntas. de 200 pontos: clean-code-ai 191, pragmatic-code 190, sem regras 176, ponytail 166. clean-code-ai e pragmatic-code empataram, a diferença de 1 ponto é ruído. o que importa é que a junção não piorou nada. detalhes no [RESULTS.md do repo](https://github.com/di0rio/clean-code-ai/blob/main/bench/RESULTS.md).
 
 ## como usar
 
