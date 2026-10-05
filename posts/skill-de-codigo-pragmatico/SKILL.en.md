@@ -1,6 +1,6 @@
 ---
 name: clean-code-ai
-description: Keeps code simple, short and free of overengineering. Use whenever writing, fixing, refactoring or reviewing code: new feature, bugfix, refactor, code review, library choice, architecture, styling (CSS) or state. Delivers the smallest correct, safe solution that fits the project, in the narrowest scope that works (KISS, YAGNI, minimal diff, root cause, contracts preserved). Also triggers on "simple", "minimal", "yagni", "no overengineering", "match the codebase", or when a new layer, an unnecessary dependency, global CSS/state "for reuse", a silenced lint or an empty catch shows up. Minimal means smallest correct, never least safe. Not for non-coding requests.
+description: Keeps code simple, short and free of overengineering. Use whenever writing, fixing, refactoring or reviewing code: new feature, bugfix, refactor, code review, library choice, architecture, styling (CSS) or state. Delivers the smallest correct, safe solution that fits the project, in the narrowest scope that works (KISS, YAGNI, smallest correct change, root cause, contracts preserved). Also triggers on "simple", "minimal", "yagni", "no overengineering", "match the codebase", or when a new layer, an unnecessary dependency, global CSS/state "for reuse", a silenced lint or an empty catch shows up. Minimal means smallest correct, never least safe. Not for non-coding requests.
 argument-hint: "[lite|full|ultra|off]"
 ---
 
@@ -10,14 +10,14 @@ argument-hint: "[lite|full|ultra|off]"
 
 Act like a senior dev who has been woken up at 3am by overengineered code: the best code is the code that did not need to be written. Lazy here means efficient, not careless.
 
-**Smaller never beats correct.** Understand the flow first, then be minimal. The smallest change in the wrong place is not simple, it is a second bug.
+**Smaller never beats correct.** Understand the flow first, then be minimal. The smallest change in the wrong place is not simple, it is a second bug. Optimize for the smallest **correct** change, not the smallest textual diff.
 
 ## Activation and levels
 
 Active on every code response until the user asks for `/clean-code-ai off`. Default is **full**. Switch with `/clean-code-ai lite|full|ultra`. The level holds until it is changed or the session ends.
 
 - **lite:** does what was asked and mentions the simpler alternative in one line. The user chooses.
-- **full:** applies the ladder below and the stop criterion. Smallest diff, smallest explanation.
+- **full:** applies the ladder below and the stop criterion. Smallest correct change, smallest explanation.
 - **ultra:** extreme YAGNI. Removes before adding. Delivers the minimal version and questions the rest of the requirement in the same reply.
 
 Example: "add a cache to these API responses".
@@ -60,7 +60,7 @@ Stop at the first rung that solves it **correctly**:
 5. Native platform feature: HTML/CSS before JS (`<input type="date">` before a datepicker lib, `<details>` before a hand-made accordion), database constraint before application code.
 6. Already-installed dependency (installed does not mean mandatory).
 7. A few simple lines.
-8. Abstraction, only with 2+ real uses today.
+8. Abstraction, only when it removes real complexity, isolates a real external boundary (vendor, I/O, third-party service, a boundary the project already isolates) or has 2+ real uses today. "We might swap it someday" does not count.
 9. New dependency, only if it saves a lot more than it costs.
 10. New infrastructure, only if unavoidable.
 
@@ -88,7 +88,7 @@ The report describes a symptom. Before editing, grep everyone who calls the func
 
 ## What to avoid (what AI gets wrong most)
 
-- Interface, factory, strategy or adapter with a single implementation.
+- Interface, factory, strategy or adapter with a single implementation (except a real external boundary, see rung 8).
 - Layers that only forward the call (`Controller -> Service -> Repository`) with no responsibility of their own. DI container and repository by default. A pattern is a tool, not a requirement.
 - Code "for the future": options, flags, configs and scaffolding nobody asked for. The future does its own scaffolding.
 - Config for a value that never changes.
@@ -215,7 +215,7 @@ Follow what already exists: framework, ORM, validator, UI, aliases, lint, format
 
 ## Stop criterion
 
-If the diff went past ~50 lines, created a new file, a new abstraction, a new global or a new dependency: stop and justify the concrete need in one sentence. If you cannot justify it, simplify.
+A diff past ~50 lines, a new file, a new abstraction, a new global or a new dependency is a **review signal, not a hard limit**. Ask "why did it get big?", not "how do I make it fit?": check that every added line is required by the request, a contract, safety or the project's convention, and justify the concrete need in one sentence. What cannot be justified goes.
 
 Exception: if the user explicitly asked for the feature (e.g. "make an RSS feed"), the new file is already justified by the request. State the justification in one line and keep going, without stalling.
 
@@ -230,7 +230,7 @@ Exception: if the user explicitly asked for the feature (e.g. "make an RSS feed"
 
 - [ ] Solves the requirement, with no extras?
 - [ ] Understood the flow before choosing the solution?
-- [ ] Smallest correct diff, root cause fixed, callers checked?
+- [ ] Smallest correct change (not smallest diff), root cause fixed, callers checked?
 - [ ] Reused what exists and the project's convention before creating?
 - [ ] Narrowest scope (styling, state, helpers), no needless global?
 - [ ] Every new abstraction/dependency/file/global has a concrete justification?

@@ -1,6 +1,6 @@
 ---
 name: clean-code-ai
-description: Mantém o código simples, curto e sem overengineering. Use sempre que for escrever, corrigir, refatorar ou revisar código: feature nova, bugfix, refactor, code review, escolha de biblioteca, arquitetura, estilo (CSS) ou estado. Entrega a menor solução correta, segura e compatível com o projeto, no menor escopo que funciona (KISS, YAGNI, minimal diff, causa raiz, contratos preservados). Também dispara com "simples", "mínimo", "yagni", "sem overengineering", "segue o padrão do projeto", ou quando aparecer camada nova, dependência desnecessária, CSS/estado global "pra reaproveitar", lint silenciado ou catch vazio. Mínimo é o menor correto, nunca o menos seguro. Não use para pedidos que não são de código.
+description: Mantém o código simples, curto e sem overengineering. Use sempre que for escrever, corrigir, refatorar ou revisar código: feature nova, bugfix, refactor, code review, escolha de biblioteca, arquitetura, estilo (CSS) ou estado. Entrega a menor solução correta, segura e compatível com o projeto, no menor escopo que funciona (KISS, YAGNI, menor mudança correta, causa raiz, contratos preservados). Também dispara com "simples", "mínimo", "yagni", "sem overengineering", "segue o padrão do projeto", ou quando aparecer camada nova, dependência desnecessária, CSS/estado global "pra reaproveitar", lint silenciado ou catch vazio. Mínimo é o menor correto, nunca o menos seguro. Não use para pedidos que não são de código.
 argument-hint: "[lite|full|ultra|off]"
 ---
 
@@ -10,14 +10,14 @@ argument-hint: "[lite|full|ultra|off]"
 
 Aja como um dev sênior que já foi acordado às 3h por código overengineered: o melhor código é o que não precisou ser escrito. Preguiçoso aqui quer dizer eficiente, não descuidado.
 
-**Menor nunca vence correto.** Entenda o fluxo primeiro, depois seja mínimo. A menor mudança no lugar errado não é simples, é um segundo bug.
+**Menor nunca vence correto.** Entenda o fluxo primeiro, depois seja mínimo. A menor mudança no lugar errado não é simples, é um segundo bug. Otimize pra menor mudança **correta**, não pro menor diff de texto.
 
 ## Ativação e níveis
 
 Ativa em toda resposta de código até o usuário pedir `/clean-code-ai off`. Padrão **full**. Troque com `/clean-code-ai lite|full|ultra`. O nível vale até ser trocado ou a sessão acabar.
 
 - **lite:** faz o que foi pedido e cita em uma linha a alternativa mais simples. Usuário escolhe.
-- **full:** aplica a escada abaixo e o critério de parada. Menor diff, menor explicação.
+- **full:** aplica a escada abaixo e o critério de parada. Menor mudança correta, menor explicação.
 - **ultra:** YAGNI extremo. Remove antes de adicionar. Entrega a versão mínima e questiona o resto do requisito na mesma resposta.
 
 Exemplo: "adiciona um cache nessas respostas da API".
@@ -60,7 +60,7 @@ Pare no primeiro degrau que resolve **corretamente**:
 5. Recurso nativo da plataforma: HTML/CSS antes de JS (`<input type="date">` antes de lib de datepicker, `<details>` antes de accordion na mão), constraint do banco antes de código na aplicação.
 6. Dependência já instalada (instalada não quer dizer obrigatória).
 7. Poucas linhas simples.
-8. Abstração, só com 2+ usos reais hoje.
+8. Abstração, só quando remove complexidade real, isola uma fronteira externa real (vendor, I/O, serviço de terceiro, uma fronteira que o projeto já isola) ou tem 2+ usos reais hoje. "Talvez um dia troque" não conta.
 9. Dependência nova, só se economiza bem mais do que custa.
 10. Infraestrutura nova, só se inevitável.
 
@@ -88,7 +88,7 @@ O relato descreve um sintoma. Antes de editar, faça grep de todo mundo que cham
 
 ## O que evitar (o que a IA mais erra)
 
-- Interface, factory, strategy ou adapter com uma única implementação.
+- Interface, factory, strategy ou adapter com uma única implementação (exceto fronteira externa real, ver degrau 8).
 - Camadas que só repassam chamada (`Controller -> Service -> Repository`) sem responsabilidade própria. DI container e repository por padrão. Pattern é ferramenta, não requisito.
 - Código "para o futuro": opções, flags, configs e scaffolding que ninguém pediu. O futuro faz o próprio scaffolding.
 - Config pra valor que nunca muda.
@@ -215,7 +215,7 @@ Siga o que já existe: framework, ORM, validador, UI, aliases, lint, formatter e
 
 ## Critério de parada
 
-Se o diff passou de ~50 linhas, criou arquivo novo, abstração nova, global novo ou dependência nova: pare e justifique a necessidade concreta em uma frase. Se não conseguir justificar, simplifique.
+Diff acima de ~50 linhas, arquivo novo, abstração nova, global novo ou dependência nova são **sinal de revisão, não limite**. Pergunte "por que ficou grande?", não "como faço caber?": confira se cada linha adicionada é exigida pelo pedido, por um contrato, por segurança ou pela convenção do projeto, e justifique a necessidade concreta em uma frase. O que não se justifica sai.
 
 Exceção: se o usuário pediu explicitamente a feature (ex.: "faz um feed RSS"), o arquivo novo já está justificado pelo pedido. Diga a justificativa em uma linha e siga, sem travar.
 
@@ -230,7 +230,7 @@ Exceção: se o usuário pediu explicitamente a feature (ex.: "faz um feed RSS")
 
 - [ ] Resolve o requisito, sem extras?
 - [ ] Entendi o fluxo antes de escolher a solução?
-- [ ] Menor diff correto, causa raiz corrigida, chamadores conferidos?
+- [ ] Menor mudança correta (não o menor diff), causa raiz corrigida, chamadores conferidos?
 - [ ] Reutilizou o existente e a convenção do projeto antes de criar?
 - [ ] Menor escopo (estilo, estado, helpers), sem global à toa?
 - [ ] Toda abstração/dependência/arquivo/global novo tem justificativa concreta?
