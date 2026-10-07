@@ -1,6 +1,6 @@
 # notas
 
-notas do Cauã Diorio: dev front-end júnior que também estuda segurança. cada post vem de coisa que eu realmente fiz ou quebrei, com código de verdade. os posts aparecem no [portfólio](https://github.com/di0rio/portfolio-cd) e moram aqui.
+minhas notas: cada post vem de coisa que eu realmente fiz ou quebrei, com código de verdade. os posts aparecem no [portfólio](https://github.com/di0rio/portfolio-cd).
 
 cada pasta tem o texto em português (`README.md`) e em inglês (`README.en.md`).
 
