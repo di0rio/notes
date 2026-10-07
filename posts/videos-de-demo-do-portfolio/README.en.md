@@ -8,7 +8,7 @@ date: 2026-10-07
 
 ## tl;dr
 
-the case studies in my portfolio have a short video of each project. the first ones I made were **UI tours**: they jumped through every screen, with a wandering cursor, broken zooms and empty states in the middle. I wrote a skill, **portfolio-demo**, that makes the AI pick **a single flow**, rehearse it in a real browser, deliver a script with the timing of each shot and, at the end, **review the exported video frame by frame**. the new videos run 28 to 45 seconds, open on the project's strongest feature and end on the result. the review even found a bug in the product, which I fixed in the project instead of hiding it in the edit.
+the case studies in my portfolio have a short video of each project. the first ones I made were **UI tours**: they jumped through every screen, with a wandering cursor, broken zooms and empty states in the middle. I wrote a skill, **portfolio-demo**, that makes the AI pick **a single flow**, rehearse it in a real browser, deliver a script with the timing of each shot, capture the video (by script, or by handing it to me to record in Recordly) and, at the end, **review the exported video frame by frame**. the new videos run 28 to 45 seconds, open on the project's strongest feature and end on the result. the review even found a bug in the product, which I fixed in the project instead of hiding it in the edit.
 
 ## the problem
 
@@ -82,7 +82,7 @@ in practice, the three videos in the portfolio today were **captured by script**
 - **cd/ui and converter-hub:** Playwright drives Edge on the deployed site, a drawn cursor is injected into the page (without changing the site), the browser's screencast becomes a constant 30 fps video and ffmpeg applies the zooms, the frame and the export. in cd/ui, the zooms are anchored to marks recorded during capture, so network variation doesn't throw anything off;
 - **sentinel-forge:** the product is a CLI, so the tool's **real** output is saved to a JSON file and replayed on an HTML page that draws the terminal frame by frame. the only change to the text was replacing an absolute path with `./rules`, and the IPs come from ranges reserved for documentation (RFC 5737).
 
-what didn't change was the rest of the skill: one flow, fictional data, no changes to the product and a frame-by-frame review. that is what made the videos good, not the recording tool.
+what didn't change was the rest of the skill: one flow, fictional data, no changes to the product and a frame-by-frame review. that is what made the videos good, not the recording tool. so the skill now has **two modes**: **scripted** (the default when the flow runs in a browser) and **manual**, in Recordly, for when the flow needs native OS UI or hand-made pacing. everything I learned from scripted capture (injected cursor, marks for the zooms, the brightness check, the replayed CLI) is written into it.
 
 as a bonus, since capture is a script, every video exists in **both themes** with the same script and the same timing. the portfolio shows the dark or light version depending on the reader's theme.
 

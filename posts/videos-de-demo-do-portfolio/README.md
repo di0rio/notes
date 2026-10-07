@@ -8,7 +8,7 @@ date: 2026-10-07
 
 ## tl;dr
 
-os estudos de caso do meu portfólio têm um vídeo curto de cada projeto. os primeiros que eu fiz eram **tour pela interface**: pulavam por todas as telas, com cursor vagando, zoom quebrado e tela vazia no meio. escrevi uma skill, a **portfolio-demo**, que faz a IA escolher **um fluxo só**, ensaiar esse fluxo no navegador de verdade, entregar um roteiro com tempo de cada take e, no fim, **revisar o vídeo exportado quadro a quadro**. os vídeos novos têm de 28 a 45 segundos, abrem no que o projeto tem de mais forte e terminam no resultado. a revisão ainda achou um bug no produto, que eu corrigi no projeto em vez de esconder na edição.
+os estudos de caso do meu portfólio têm um vídeo curto de cada projeto. os primeiros que eu fiz eram **tour pela interface**: pulavam por todas as telas, com cursor vagando, zoom quebrado e tela vazia no meio. escrevi uma skill, a **portfolio-demo**, que faz a IA escolher **um fluxo só**, ensaiar esse fluxo no navegador de verdade, entregar um roteiro com tempo de cada take, capturar o vídeo (por script ou me passando pra gravar no Recordly) e, no fim, **revisar o vídeo exportado quadro a quadro**. os vídeos novos têm de 28 a 45 segundos, abrem no que o projeto tem de mais forte e terminam no resultado. a revisão ainda achou um bug no produto, que eu corrigi no projeto em vez de esconder na edição.
 
 ## o problema
 
@@ -82,7 +82,7 @@ na prática, os três vídeos que estão no portfólio hoje foram **capturados p
 - **cd/ui e converter-hub:** o Playwright dirige o Edge no site publicado, um cursor desenhado é injetado na página (sem alterar o site), o screencast do navegador vira um vídeo de 30 fps constante e o ffmpeg aplica os zooms, a moldura e o export. no cd/ui, os zooms ficam presos a marcas gravadas durante a captura, então uma variação de rede não desalinha nada;
 - **sentinel-forge:** o produto é uma CLI, então a saída **real** da ferramenta é gravada num JSON e reencenada numa página HTML que desenha o terminal quadro a quadro. a única mudança no texto foi trocar um caminho absoluto por `./rules`, e os IPs são de faixas reservadas pra documentação (RFC 5737).
 
-o que não mudou foi o resto da skill: escolher um fluxo, dados fictícios, não mexer no produto e revisar quadro a quadro. foi isso que fez os vídeos ficarem bons, não a ferramenta de gravação.
+o que não mudou foi o resto da skill: escolher um fluxo, dados fictícios, não mexer no produto e revisar quadro a quadro. foi isso que fez os vídeos ficarem bons, não a ferramenta de gravação. por isso a skill agora tem **dois modos**: **script** (o padrão quando o fluxo roda no navegador) e **manual**, no Recordly, pra quando precisa de UI nativa do sistema ou de um ritmo feito à mão. tudo o que aprendi na captura por script (cursor injetado, marcas pros zooms, checagem de luminosidade, CLI reencenada) está escrito nela.
 
 de bônus, como a captura é script, cada vídeo existe nos **dois temas** com o mesmo roteiro e o mesmo tempo. o portfólio mostra a versão escura ou a clara conforme o tema de quem está lendo.
 
