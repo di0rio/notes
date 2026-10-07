@@ -134,11 +134,11 @@ update 2026-10-05: I merged the skill with an earlier draft of mine, also called
 
 Later I asked ChatGPT to review the skill and took 3 of its critiques: an abstraction with a single implementation is fine when it isolates a real external boundary (vendor, I/O), not for "we might swap it someday"; the ~50 lines became a review signal ("why did it get big?"), not a limit ("how do I make it fit?"); and the goal is the smallest correct change, not the smallest textual diff, because a guard in the caller is a smaller diff but not the right fix.
 
-I re-ran the quick test (5 tasks) with clean-code-ai, and the judge re-scored all 4 versions blind, together. Out of 200: clean-code-ai 191, pragmatic-code 190, no rules 176, ponytail 166. clean-code-ai and pragmatic-code tied; a 1-point gap is noise. What matters is that the merge did not make anything worse. Details in the [repo's RESULTS.md](https://github.com/di0rio/clean-code-ai/blob/main/bench/RESULTS.md).
+I re-ran the quick test (5 tasks) with clean-code-ai, and the judge re-scored all 4 versions blind, together. Out of 200: clean-code-ai 191, pragmatic-code 190, no rules 176, ponytail 166. clean-code-ai and pragmatic-code tied; a 1-point gap is noise. What matters is that the merge did not make anything worse. Details in the [repo's RESULTS.md](https://github.com/di0rio/cd-skills/blob/main/bench/clean-code-ai/RESULTS.md).
 
 ## how to use it
 
-The skill now has its own repo, with install steps and a quick test (5 small tasks, with and without rules, judged blind by another model): [github.com/di0rio/clean-code-ai](https://github.com/di0rio/clean-code-ai).
+The skill now lives in my skills repo, with install steps and a quick test (5 small tasks, with and without rules, judged blind by another model): [github.com/di0rio/cd-skills](https://github.com/di0rio/cd-skills/tree/main/skills/clean-code-ai).
 
 Two ways, the ones I use:
 

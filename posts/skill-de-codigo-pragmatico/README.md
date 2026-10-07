@@ -134,11 +134,11 @@ atualização de 2026-10-05: juntei a skill com um rascunho meu mais antigo, tam
 
 depois, pedi uma revisão da skill pro ChatGPT e aceitei 3 críticas: abstração com uma implementação só vale quando isola uma fronteira externa real (vendor, I/O), não por "talvez um dia troque"; as ~50 linhas viraram sinal de revisão ("por que ficou grande?"), não limite ("como faço caber?"); e o objetivo é a menor mudança correta, não o menor diff de texto, porque um guard no chamador é um diff menor mas não é a correção certa.
 
-rodei o teste rápido (5 tarefas) de novo com a clean-code-ai, e o juiz reavaliou às cegas as 4 versões juntas. de 200 pontos: clean-code-ai 191, pragmatic-code 190, sem regras 176, ponytail 166. clean-code-ai e pragmatic-code empataram, a diferença de 1 ponto é ruído. o que importa é que a junção não piorou nada. detalhes no [RESULTS.md do repo](https://github.com/di0rio/clean-code-ai/blob/main/bench/RESULTS.md).
+rodei o teste rápido (5 tarefas) de novo com a clean-code-ai, e o juiz reavaliou às cegas as 4 versões juntas. de 200 pontos: clean-code-ai 191, pragmatic-code 190, sem regras 176, ponytail 166. clean-code-ai e pragmatic-code empataram, a diferença de 1 ponto é ruído. o que importa é que a junção não piorou nada. detalhes no [RESULTS.md do repo](https://github.com/di0rio/cd-skills/blob/main/bench/clean-code-ai/RESULTS.md).
 
 ## como usar
 
-a skill agora tem repo próprio, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/clean-code-ai](https://github.com/di0rio/clean-code-ai).
+a skill agora mora no meu repo de skills, com instalação e um teste rápido (5 tarefas pequenas, com e sem regras, avaliadas às cegas por outro modelo): [github.com/di0rio/cd-skills](https://github.com/di0rio/cd-skills/tree/main/skills/clean-code-ai).
 
 duas formas, as que eu uso:
 
